@@ -1,5 +1,11 @@
 module Data where
 
+data Piece = Blocks [Block]
+
+data Block = Point (Int, Int)
+
+data World = Pieces [Piece]
+
 screenx, screeny :: Int
 screenx = 800
 screeny = 600
