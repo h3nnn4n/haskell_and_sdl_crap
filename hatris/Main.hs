@@ -7,8 +7,8 @@ import Control.Monad       (forever, forM_)
 import Graphics.UI.SDL.Primitives
 
 drawGrid surface = do
-    forM_ [0, dx .. dx*boardx] $ \x -> do
-        forM_ [0, dy .. dy*boardy] $ \y -> do
+    forM_ [0, dx .. dx*boardx] $ \x ->
+        forM_ [0, dy .. dy*boardy] $ \y ->
            rectangle surface (Rect (x+posx) (y+posy) (posx+(x+dx)) (posy+(y+dy))) (Pixel 0xFFFFFF)
 
 main :: IO ()
@@ -33,16 +33,16 @@ gameLoop surface world = do
             SDL.flip surface
             gameLoop surface world
 
-
 eventHandler :: Event -> World -> World
 eventHandler event world =
     case event of
-        Quit -> world { toquit = True }
         KeyDown (Keysym key _ _) -> case key of
-            SDLK_DOWN  -> world { position = updatePosition world DOWN  }
-            SDLK_LEFT  -> world { position = updatePosition world LEFT  }
-            SDLK_RIGHT -> world { position = updatePosition world RIGHT }
-            _      -> world
+            SDLK_DOWN   -> world { position = updatePosition world DOWN  }
+            SDLK_LEFT   -> world { position = updatePosition world LEFT  }
+            SDLK_RIGHT  -> world { position = updatePosition world RIGHT }
+            SDLK_ESCAPE -> world { toquit   = True                       }
+            _           -> world
+        Quit -> world { toquit = True }
         _    -> world
 
 updatePosition :: World -> Move -> Point
