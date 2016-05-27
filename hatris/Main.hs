@@ -1,15 +1,9 @@
 module Main where
 
 import Data
+import Graphics
 
 import Graphics.UI.SDL     as SDL
-import Control.Monad       (forever, forM_)
-import Graphics.UI.SDL.Primitives
-
-drawGrid surface = do
-    forM_ [0, dx .. dx*boardx] $ \x ->
-        forM_ [0, dy .. dy*boardy] $ \y ->
-           rectangle surface (Rect (x+posx) (y+posy) (posx+(x+dx)) (posy+(y+dy))) (Pixel 0xFFFFFF)
 
 main :: IO ()
 main = do
