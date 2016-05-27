@@ -4,17 +4,18 @@ module Data where
 -- the current piece, its coordinates and the next piece.
 --data World = Pieces ([Point], Int, Piece, Point, Piece)
 data World = World
-    { blocks    :: [Point]
-    , score     :: Int
-    , falling   :: Piece
-    , position  :: Point
-    , nextPiece :: Piece
-    , toquit    :: Bool
+    { blocks     :: [Point]
+    , score      :: Int
+    , falling    :: Piece
+    , position   :: Point
+    , nextPiece  :: Piece
+    , toquit     :: Bool
+    , updateScrn :: Bool
     }
 
 -- A piece is made of blocks, which are 2d points
 data Piece = Piece [Point]
-data Point = Point (Int, Int)
+data Point = Point (Int, Int) deriving Show
 
 -- A data type to pass around which direction pieces should go
 data Move = LEFT | RIGHT | DOWN
@@ -42,10 +43,11 @@ posx = (div screenx 2) - (div boardx 2)*dx
 posy = (div screeny 2) - (div boardy 2)*dy
 
 newWorld = World
-    { blocks    = []
-    , score     = 0
-    , falling   = Piece [Point (1,1)]
-    , position  = Point (1, 1)
-    , nextPiece = Piece [Point (1,1), Point (1,2)]
-    , toquit    = False
+    { blocks     = []
+    , score      = 0
+    , falling    = Piece [Point (1,1)]
+    , position   = Point (div boardx 2, boardy)
+    , nextPiece  = Piece [Point (1,1), Point (1,2)]
+    , toquit     = False
+    , updateScrn = False
     }

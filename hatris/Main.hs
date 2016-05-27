@@ -4,6 +4,8 @@ import Data
 import Graphics
 
 import Graphics.UI.SDL     as SDL
+import Control.Monad
+import System.IO.Unsafe
 
 main :: IO ()
 main = do
@@ -24,17 +26,20 @@ gameLoop surface world = do
         w@(World { toquit = True  }) -> return w
         w@(World { toquit = False }) -> do
             drawGrid surface
+            drawPos  surface $ position w
+            when (updateScrn w) (
+                print $ position w )
             SDL.flip surface
-            gameLoop surface world
+            gameLoop surface w { updateScrn = False }
 
 eventHandler :: Event -> World -> World
 eventHandler event world =
     case event of
         KeyDown (Keysym key _ _) -> case key of
-            SDLK_DOWN   -> world { position = updatePosition world DOWN  }
-            SDLK_LEFT   -> world { position = updatePosition world LEFT  }
-            SDLK_RIGHT  -> world { position = updatePosition world RIGHT }
-            SDLK_ESCAPE -> world { toquit   = True                       }
+            SDLK_DOWN   -> world { position = updatePosition world DOWN , updateScrn = True }
+            SDLK_LEFT   -> world { position = updatePosition world LEFT , updateScrn = True }
+            SDLK_RIGHT  -> world { position = updatePosition world RIGHT, updateScrn = True }
+            SDLK_ESCAPE -> world { toquit   = True                                          }
             _           -> world
         Quit -> world { toquit = True }
         _    -> world
