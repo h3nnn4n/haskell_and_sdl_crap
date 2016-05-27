@@ -16,6 +16,9 @@ data World = World
 data Piece = Piece [Point]
 data Point = Point (Int, Int)
 
+-- A data type to pass around which direction pieces should go
+data Move = LEFT | RIGHT | DOWN
+    deriving Eq
 
 -- The screen resolution
 screenx, screeny :: Int

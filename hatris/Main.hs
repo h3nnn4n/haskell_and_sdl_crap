@@ -36,6 +36,20 @@ gameLoop surface world = do
 
 eventHandler :: Event -> World -> World
 eventHandler event world =
-   case event of
-       Quit -> world { toquit = True }
-       _    -> world
+    case event of
+        Quit -> world { toquit = True }
+        KeyDown (Keysym key _ _) -> case key of
+            SDLK_DOWN  -> world { position = updatePosition world DOWN  }
+            SDLK_LEFT  -> world { position = updatePosition world LEFT  }
+            SDLK_RIGHT -> world { position = updatePosition world RIGHT }
+            _      -> world
+        _    -> world
+
+updatePosition :: World -> Move -> Point
+updatePosition w move
+    | move == DOWN  = if py > 1      then Point (px    , py - 1) else position w
+    | move == LEFT  = if px > 1      then Point (px - 1, py    ) else position w
+    | move == RIGHT = if px < boardx then Point (px + 1, py    ) else position w
+    | otherwise     = position w
+    where
+        Point (px, py) = position w
